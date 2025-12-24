@@ -48,11 +48,25 @@ public class TestBase {
 		return homePage;
 	}
 
-	@AfterMethod(description = "Tear Down the browser")
+//	@AfterMethod(description = "Tear Down the browser")
+//	public void tearDown() {
+//		if (isLambdaTest) {
+//			LambdaTestUtility.quitSession();
+//		}
+//	}
+	
+	@AfterMethod(alwaysRun = true)
 	public void tearDown() {
-		if (isLambdaTest) {
-			LambdaTestUtility.quitSession();
-		}
+	    try {
+	        if (isLambdaTest) {
+	            LambdaTestUtility.quitSession();
+	        } else if (homePage != null) {
+	            homePage.quitDriver();
+	        }
+	    } catch (Exception e) {
+	        logger.error("Error during teardown", e);
+	    }
 	}
+
 
 }
