@@ -2,8 +2,6 @@ package com.ui.tests;
 
 import static com.constants.Browser.CHROME;
 
-import java.lang.reflect.Method;
-
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
@@ -29,12 +27,12 @@ public class TestBase {
 	public void setup(
 			@Optional("chrome") String browser, 
 			@Optional("false") boolean isLambdaTest, 
-			@Optional("true") boolean isHeadless, Method method) {
+			@Optional("true") boolean isHeadless, ITestResult result) {
 		
 		this.isLambdaTest = isLambdaTest;
 		WebDriver lambdaDriver;
 		if (isLambdaTest) {
-			lambdaDriver = LambdaTestUtility.initializeLambdaTestSession(browser, method.getName());
+			lambdaDriver = LambdaTestUtility.initializeLambdaTestSession(browser, result.getMethod().getMethodName());
 			homePage = new HomePage(lambdaDriver);
 		}
 
@@ -48,25 +46,13 @@ public class TestBase {
 		return homePage;
 	}
 
-//	@AfterMethod(description = "Tear Down the browser")
-//	public void tearDown() {
-//		if (isLambdaTest) {
-//			LambdaTestUtility.quitSession();
-//		}
-//	}
-	
-	@AfterMethod(alwaysRun = true)
+	@AfterMethod(description = "Tear Down the browser")
 	public void tearDown() {
-	    try {
-	        if (isLambdaTest) {
-	            LambdaTestUtility.quitSession();
-	        } else if (homePage != null) {
-	            homePage.quitDriver();
-	        }
-	    } catch (Exception e) {
-	        logger.error("Error during teardown", e);
-	    }
+		if (isLambdaTest) {
+			LambdaTestUtility.quitSession();
+		}else {
+			homePage.quitDriver();
+		}
 	}
-
 
 }
