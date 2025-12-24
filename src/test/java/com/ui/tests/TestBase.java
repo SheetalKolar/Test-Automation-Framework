@@ -2,6 +2,8 @@ package com.ui.tests;
 
 import static com.constants.Browser.CHROME;
 
+import java.lang.reflect.Method;
+
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
@@ -22,17 +24,17 @@ public class TestBase {
 	Logger logger = LoggerUtility.getLogger(this.getClass());
 	private boolean isLambdaTest;
 
-	@Parameters({"browser","isLambdaTest", "isHeadless"})
 	@BeforeMethod(description = "Load the Homepage of the website")
+	@Parameters({"browser","isLambdaTest", "isHeadless"})
 	public void setup(
 			@Optional("chrome") String browser, 
 			@Optional("false") boolean isLambdaTest, 
-			@Optional("true") boolean isHeadless, ITestResult result) {
+			@Optional("true") boolean isHeadless, Method method) {
 		
 		this.isLambdaTest = isLambdaTest;
 		WebDriver lambdaDriver;
 		if (isLambdaTest) {
-			lambdaDriver = LambdaTestUtility.initializeLambdaTestSession(browser, result.getMethod().getMethodName());
+			lambdaDriver = LambdaTestUtility.initializeLambdaTestSession(browser, method.getName());
 			homePage = new HomePage(lambdaDriver);
 		}
 
