@@ -64,3 +64,4 @@ jobs:
         folder: public/extent-reports/
         token: ${{ secrets.PAT1234 }}
         clean: true
+        
