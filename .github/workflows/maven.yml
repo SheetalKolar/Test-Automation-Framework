@@ -24,14 +24,14 @@ jobs:
       run: mvn test -X -Dbrowser=chrome -DisLambdaTest=true -DisHeadless=false
 
     - name: Upload Test logs
-      if: always
+      if: always()
       uses: actions/upload-artifact@v6.0.0
       with: 
        name: Test logs
        path: logs/
 
     - name: Upload Test Reports
-      if: always
+      if: always()
       uses: actions/upload-artifact@v6.0.0
       with: 
        name: Test Reports
